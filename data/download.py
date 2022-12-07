@@ -21,7 +21,7 @@ def download_and_unzip(source_url, zip_path, local_path, use_tar=False, http=Fal
     if use_tar:
         unzip_cmd = "tar xf {} -C {}".format(zip_path, local_path)
     else:
-        unzip_cmd = "unzip {} -d {}".format(zip_path, local_path)
+        unzip_cmd = "sudo unzip {} -d {}".format(zip_path, local_path)
     os.system(unzip_cmd)
     print("Unzip done!")
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
                            os.path.join(config.root_path, "zip/occlusionLinemod.zip"),
                            os.path.join(config.root_path, config.occlusionLINEMOD.local_path))
 
-        refactor_command = "mv {} {}".format(os.path.join(config.root_path, config.occlusionLINEMOD.local_path,
+        refactor_command = "sudo mv {} {}".format(os.path.join(config.root_path, config.occlusionLINEMOD.local_path,
                                                           "OcclusionChallengeICCV2015/*"),
                                              os.path.join(config.root_path, config.occlusionLINEMOD.local_path))
         os.system(refactor_command)
@@ -65,7 +65,7 @@ if __name__ == '__main__':
         zip_name = os.path.join(config.root_path, "zip/tless_train_primesense.zip")
         download_and_unzip(url, zip_name, local, http=True)
         # refactor "tless/train_primesense" to "tless/train"
-        os.system("mv {} {}".format(os.path.join(local, "train_primesense"), os.path.join(local, "train")))
+        os.system("sudo mv {} {}".format(os.path.join(local, "train_primesense"), os.path.join(local, "train")))
 
         # download 20 test scenes of T-LESS dataset from BOP challenge
         url = config.TLESS.source_url + "/tless_test_primesense_all.zip"
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         zip_name = os.path.join(config.root_path, "zip/tless_test_primesense_all.zip")
         download_and_unzip(url, zip_name, local, http=True)
         # refactor "tless/test_primesense" to "tless/test"
-        os.system("mv {} {}".format(os.path.join(local, "test_primesense"), os.path.join(local, "test")))
+        os.system("sudo mv {} {}".format(os.path.join(local, "test_primesense"), os.path.join(local, "test")))
 
         # download camera intrinsic for test set and list of all test images
         url = config.TLESS.source_url + "/tless_base.zip"
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         local = os.path.join(config.root_path, config.TLESS.local_path)
         zip_name = os.path.join(config.root_path, "zip/tless_base.zip")
         download_and_unzip(url, zip_name, tmp_path, http=True)
-        os.system("mv {} {}".format(os.path.join(tmp_path, "tless/*"), os.path.join(local)))
+        os.system("sudo mv {} {}".format(os.path.join(tmp_path, "tless/*"), os.path.join(local)))
 
         # download CAD models of TLess
         download_and_unzip(config.TLESS.cad_url + "/t-less_v2_models_cad.zip",
@@ -100,17 +100,17 @@ if __name__ == '__main__':
             zip_path = os.path.join(config.root_path, "zip", "{}.zip".format(name))
             gdown.download(config.gdrive[name], zip_path, quiet=False, fuzzy=True)
             if name in ["linemod", "templates", "TLESS"]:
-                unzip_command = "unzip {} -d {}".format(zip_path, config.root_path)
+                unzip_command = "sudo unzip {} -d {}".format(zip_path, config.root_path)
                 os.system(unzip_command)
             else:
-                unzip_command = "unzip {} -d {}".format(zip_path, config.root_path)
+                unzip_command = "sudo unzip {} -d {}".format(zip_path, config.root_path)
                 os.system(unzip_command)
                 dataframe_paths = glob.glob(config.root_path + "/dataframes/*.json")
                 for dataframe_path in dataframe_paths:
                     new_dataframe_path = dataframe_path.replace("/dataframes/", "/")
-                    refactor_command = "mv {} {}".format(dataframe_path, new_dataframe_path)
+                    refactor_command = "sudo mv {} {}".format(dataframe_path, new_dataframe_path)
                     os.system(refactor_command)
-                os.system("rm -r {}".format(config.root_path + "/dataframes"))
+                os.system("sudo rm -r {}".format(config.root_path + "/dataframes"))
 
     if args.dataset in ["SUN397", "preprocessed_in_gdrive", "all"]:
         # download LINEMOD dataset and unzip
